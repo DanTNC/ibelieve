@@ -1,4 +1,5 @@
 const express = require('express')
+const axios = require('axios')
 const app = express()
 const port = process.env.PORT || 3000
 
@@ -9,12 +10,13 @@ app.get('/', (req, res) => {
 })
 
 app.get('/login', function(req, res) {
-var scopes = 'playlist-read-private';
-res.redirect('https://accounts.spotify.com/authorize' +
-    '?response_type=code' +
-    '&client_id=' + process.env.ibelieve_client_id +
-    (scopes ? '&scope=' + encodeURIComponent(scopes) : '') +
-    '&redirect_uri=' + encodeURIComponent(redirect_uri));
+  var scopes = 'playlist-read-private';
+  res.redirect('https://accounts.spotify.com/authorize' +
+      '?response_type=code' +
+      '&client_id=' + process.env.ibelieve_client_id +
+      (scopes ? '&scope=' + encodeURIComponent(scopes) : '') +
+      '&redirect_uri=' + encodeURIComponent(redirect_uri)) + 
+      '&state=TAYEN';
 });
 
 app.get('/callback', (req, res) => {
