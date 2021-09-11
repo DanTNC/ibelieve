@@ -26,7 +26,7 @@ app.get('/callback', (req, res) => {
     qs.stringify({
       code: req.query.code,
       grant_type: 'authorization_code',
-      redirect_uri: encodeURIComponent(redirect_uri),
+      redirect_uri: redirect_uri,
       client_id: process.env.ibelieve_client_id,
       client_secret: process.env.ibelieve_client_secret,
     }),
