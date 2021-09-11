@@ -1,5 +1,6 @@
 const express = require('express')
 const axios = require('axios')
+const qs = require('qs')
 const app = express()
 const port = process.env.PORT || 3000
 
@@ -22,11 +23,11 @@ app.get('/login', function(req, res) {
 app.get('/callback', (req, res) => {
   axios.post(
     'https://accounts.spotify.com/api/token',
-    {
+    qs.stringify({
       code: req.query.code,
       grant_type: 'authorization_code',
       redirect_uri: encodeURIComponent(redirect_uri)
-    },
+    }),
     {
       headers: {
         'Authorization': 'Authorization: Basic ' + process.env.ibelieve_auth,
