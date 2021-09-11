@@ -16,8 +16,8 @@ app.get('/login', function(req, res) {
       '?response_type=code' +
       '&client_id=' + process.env.ibelieve_client_id +
       (scopes ? '&scope=' + encodeURIComponent(scopes) : '') +
-      '&redirect_uri=' + encodeURIComponent(redirect_uri)) + 
-      '&state=TAYEN';
+      '&redirect_uri=' + encodeURIComponent(redirect_uri) + 
+      '&state=TAYEN')
 });
 
 app.get('/callback', (req, res) => {
@@ -26,11 +26,12 @@ app.get('/callback', (req, res) => {
     qs.stringify({
       code: req.query.code,
       grant_type: 'authorization_code',
-      redirect_uri: encodeURIComponent(redirect_uri)
+      redirect_uri: encodeURIComponent(redirect_uri),
+      client_id: process.env.ibelieve_client_id,
+      client_secret: process.env.ibelieve_client_secret,
     }),
     {
       headers: {
-        'Authorization': 'Authorization: Basic ' + process.env.ibelieve_auth,
         'Content-Type': 'application/x-www-form-urlencoded'
       },
     } 
