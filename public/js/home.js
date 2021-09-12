@@ -1,7 +1,11 @@
 $(() => {
-    localStorage.setItem("NT", "TAYEN")
+    const uid = localStorage.getItem('uid')
 
-    $("#login").click(() => {
-        window.location = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + "/login"
+    if (uid != null) {
+        $("#uid").val(uid)
+    }
+
+    $("#signup").click(() => {
+        window.location = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + "/signup"
     })
 })

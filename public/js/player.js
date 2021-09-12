@@ -1,15 +1,69 @@
 var ibelieve_player
 
+const urlSearchParams = new URLSearchParams(window.location.search);
+const uidFromQuery = urlSearchParams.get('uid');
+console.log(uidFromQuery);
+if (uidFromQuery) {
+    localStorage.setItem("uid", uidFromQuery)
+}
+const uid = localStorage.getItem("uid")
+
+const checkIfExpired = (token, callback) => {
+    $.get({
+        url: 'https://api.spotify.com/v1/me',
+        data: {
+            access_token: token
+        },
+        success: function(data) {// not expired
+            callback(token)
+        },
+        error: function(message) {
+            message = message.responseJSON
+            if (message?.error?.status == 401 && message?.error?.message == "The access token expired") {//expired
+                console.log("refresh token because it expired")
+                $.get({
+                    url: '/token',
+                    data: {
+                        "uid": uid,
+                        "action": "refresh"
+                    },
+                    success: function(token) {
+                        callback(token)
+                    },
+                    error: function(message) {
+                        console.error(message)
+                    }
+                })
+            } else {
+                console.error(message)
+            }
+        }
+    })
+}
+
+const getTokenThen = (callback) => {
+    $.get({
+        url: '/token',
+        data: {
+            "uid": uid,
+        },
+        success: function(token) {
+            checkIfExpired(token, callback)
+        },
+        error: function(message) {
+            console.log(message)
+        }
+    })
+}
+
 class IBelievePlayer {
     constructor(token) {
         this.initPlayer(token);
     }
 
     initPlayer(token) {
-        this.token = token
-
         this.player = new Spotify.Player({
-            name: 'Web Playback SDK Quick Start Player',
+            name: 'I Believe Spotify',
             getOAuthToken: cb => { cb(token) },
             volume: 0.5
         })
@@ -46,31 +100,30 @@ class IBelievePlayer {
     }
 
     connectThis() {
-        $.ajax({
-            url: 'https://api.spotify.com/v1/me/player',
-            method: "PUT",
-            data: JSON.stringify({
-                "device_ids": [this.device_id]
-            }),
-            headers: {
-                "Authorization": `Bearer ${this.token}`,
-                "Content-Type": "application/json"
-            },
-            success: function(data) {
-                console.log(data)
-            },
-            error: function(error) {
-                console.error(error)
-            }
+        getTokenThen((token) => {
+            $.ajax({
+                url: 'https://api.spotify.com/v1/me/player',
+                method: "PUT",
+                data: JSON.stringify({
+                    "device_ids": [this.device_id]
+                }),
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                success: function(data) {
+                    console.log(data)
+                },
+                error: function(error) {
+                    console.error(error)
+                }
+            })
         })
     }
 }
 
 window.onSpotifyWebPlaybackSDKReady = () => {
-    $.get({
-        url: '/token',
-        success: function(token) {
-            ibelieve_player = new IBelievePlayer(token)
-        }
+    getTokenThen((token) => {
+        ibelieve_player = new IBelievePlayer(token)
     })
 }

@@ -1,18 +1,6 @@
-map NT to access_token and refresh_token (check all scopes (search, playlist, play, device, ...))
-
-use playback sdk for setting up device (get device_id)
-
-get access_token from backend
-
 use search or playlist to get spotify_uri
 
-use spotify connect web api to connect to device_id
-
 use getOAuthToken function of player to play a spotify_uri
-
-when sending any request check if token expires and use a refresh_token to refresh the token when it does
-
-save mapping to mongodb instead of memory
 
 ================================================
 

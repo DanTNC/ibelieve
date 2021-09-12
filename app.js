@@ -3,13 +3,19 @@ const axios = require('axios')
 const qs = require('qs')
 const app = express()
 const path = require('path')
+
+const mongoose = require('./db/dbconnect')()
+const mappingModel = require('./db/mapping')(mongoose)
+const saveMapping = require('./db/save')
+const loadMapping = require('./db/load')
+
 const port = process.env.PORT || 3000
 const dev = (process.env.ibelieve_dev || "false") === "true"
 const redirect_uri = dev? 'http://localhost:3000/callback': 'https://ibelieve.herokuapp.com/callback'
 
-var mapping = {}
+// var mapping = {}
 
-const get_token = (code, callback) => {
+const get_token = (code, uid, callback) => {
   axios.post(
     'https://accounts.spotify.com/api/token',
     qs.stringify({
@@ -26,20 +32,47 @@ const get_token = (code, callback) => {
     } 
   ).then((response) => {
     console.log(response)
-    mapping["TAYEN"] = {
+    // mapping[uid] = {
+    //   access: response.data.access_token,
+    //   refresh: response.data.refresh_token
+    // }
+    saveMapping(mappingModel, {
+      uid: uid,
       access: response.data.access_token,
       refresh: response.data.refresh_token
-    }
-    callback()
+    }, callback)
   }).catch((error) => {
     console.log(error)
   })
 }
 
-const refresh = (callback) => {
-  get_token(mapping["TAYEN"]["refresh_token"], ()=>{
-    console.log("refresh done")
-    callback()
+const refresh = (uid, refresh_token, callback) => {
+  axios.post(
+    'https://accounts.spotify.com/api/token',
+    qs.stringify({
+      refresh_token: refresh_token,
+      grant_type: 'refresh_token',
+      client_id: process.env.ibelieve_client_id,
+      client_secret: process.env.ibelieve_client_secret,
+    }),
+    {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+    } 
+  ).then((response) => {
+    console.log(response)
+    // mapping[uid] = {
+    //   access: response.data.access_token,
+    //   refresh: response.data.refresh_token ?? mapping[uid]["refresh"]
+    // }
+    saveMapping(mappingModel, {
+      uid: uid,
+      access: response.data.access_token,
+      refresh: response.data.refresh_token ?? refresh_token
+    }, callback)
+  }).catch((error) => {
+    console.log(error)
   })
 }
 
@@ -55,6 +88,10 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'view/home.html'))
 })
 
+app.get('/signup', (req, res) => {
+  res.sendFile(path.join(__dirname, 'view/signup.html'))
+})
+
 app.get('/login', function(req, res) {
   var scopes = 'playlist-read-private \
                 streaming \
@@ -65,21 +102,43 @@ app.get('/login', function(req, res) {
       '&client_id=' + process.env.ibelieve_client_id +
       (scopes ? '&scope=' + encodeURIComponent(scopes) : '') +
       '&redirect_uri=' + encodeURIComponent(redirect_uri) + 
-      '&state=TAYEN')
+      '&state=' + req.query.uid)
 });
 
 app.get('/callback', (req, res) => {
-  get_token(req.query.code, ()=>{
+  get_token(req.query.code, req.query.state, (dbres)=>{
     console.log(`${req.query.code}:${req.query.state}`)
-    res.redirect('/player')
+    if (dbres[0]) {
+      res.redirect(`/player?uid=${req.query.state}`)
+    } else {
+      res.status(400).json({message: dbres[1]})
+    }
   })
 })
 
 app.get('/token', (req, res) => {
   if (req.query.action == "refresh") {
-    refresh(() => {res.send(mapping["TAYEN"]["access"])})
+    loadMapping(mappingModel, req.query.uid, (dbres) => {
+      if (dbres[0]) {
+        refresh(req.query.uid, dbres[1].refresh, (dbres) => {
+          if (dbres[0]) {
+            res.send(dbres[1])
+          } else {
+            res.status(400).json({message: dbres[1]})
+          }
+        })
+      } else {
+        res.status(400).json({message: dbres[1]})
+      }
+    })
   } else {
-    res.send(mapping["TAYEN"]["access"])
+    loadMapping(mappingModel, req.query.uid, (dbres) => {
+      if (dbres[0]) {
+        res.send(dbres[1].access)
+      } else {
+        res.status(400).json({message: dbres[1]})
+      }
+    })
   }
 })
 
