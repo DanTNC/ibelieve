@@ -1,0 +1,39 @@
+:root {
+    --main: #89dc89;
+    --dark-main: #79be79;
+    --light-main: #90e790;
+    --background: #0f101a;
+    --dark-background: #09090f;
+    --light-background: #141624;
+}
+
+button,
+button:active,
+button:focus, 
+button:hover,
+.btn,
+.btn:active, 
+.btn:focus, 
+.btn:hover{   
+    outline:none !important;
+    box-shadow: none !important;
+}
+
+#app {
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--background)
+}
+
+.btn-main {
+    color: var(--background);
+    background-color: var(--main);
+}
+
+.btn-main:hover {
+    background-color: var(--dark-main)
+}
+
+.text-main {
+    color: var(--main);
+}

@@ -15,7 +15,10 @@ const checkIfExpired = (token, callback) => {
             access_token: token
         },
         cache: false,
-        success: function(data) {// not expired
+        success: function(info) {// not expired
+            app.name = info.display_name
+            app.email = info.email
+            app.image = info.images[0].url
             callback(token)
         },
         error: function(message) {
@@ -56,6 +59,20 @@ const getTokenThen = (callback) => {
         error: function(message) {
             console.log(message)
         }
+    })
+}
+
+const registerPlayerUIListeners = (player) => {
+    $("#togglePlay").click(() => {
+        player.togglePlay()
+    })
+
+    $("#prevTrack").click(() => {
+        player.previousTrack()
+    })
+
+    $("#nextTrack").click(() => {
+        player.nextTrack()
     })
 }
 
@@ -105,10 +122,8 @@ class IBelievePlayer {
                 app.volume = Math.round(volume * 100)
             })
         })
-    
-        $("#togglePlay").click(() => {
-            this.player.togglePlay()
-        })
+
+        registerPlayerUIListeners(this.player)
     
         this.player.connect()
     }
@@ -150,11 +165,14 @@ window.onSpotifyWebPlaybackSDKReady = () => {
 
 $(()=>{
     app = new Vue({
-        el: '#player',
+        el: '#app',
         data: {
             track_name: '',
             volume: 0,
-            paused: true
+            paused: true,
+            name: '',
+            email: '',
+            image: '',
         }
     })
 })

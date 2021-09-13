@@ -1,0 +1,10 @@
+#app .row {
+    height: 100vh;
+}
+
+.card {
+    border-color: var(--main);
+    border-width: 4px;
+    background-color: var(--light-background);
+    height: 50vh;
+}
