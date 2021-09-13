@@ -116,6 +116,8 @@ class IBelievePlayer {
             this.player.getCurrentState().then((state) => {
                 console.log(state)
                 app.track_name = state.track_window.current_track.name
+                app.album_image = state.track_window.current_track.album.images.at(-1).url
+                app.album_name = state.track_window.current_track.album.name
                 app.paused = state.paused
             })
             this.player.getVolume().then((volume) => {
@@ -167,12 +169,15 @@ $(()=>{
     app = new Vue({
         el: '#app',
         data: {
-            track_name: '',
             volume: 0,
             paused: true,
             name: '',
             email: '',
             image: '',
+            album_name: '<專輯>',
+            album_image: "/image/placeholder.jpg",
+            track_name: '<歌名>',
+            artists: [],
         }
     })
 })

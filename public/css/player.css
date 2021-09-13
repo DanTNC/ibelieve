@@ -1,3 +1,26 @@
+#user {
+    top: 1vh;
+    right: 1vh;
+}
+
 #user-image {
-    width: 80px
+    width: 30px;
+}
+
+#album-image {
+    height: 40vh;
+    width: auto;
+}
+
+#player {
+    height: 100vh;
+}
+
+#volume-box {
+    bottom: 1vh;
+    right: 1vh;
+}
+
+#volume {
+    width: 20vw;
 }

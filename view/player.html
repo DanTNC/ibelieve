@@ -13,30 +13,45 @@
     <link rel="stylesheet" href="/css/player.css"/>
   </head>
   <body>
-    <div class="container" id="app">
-        <div class="row mt-3">
-            <div class="col-12 ">
+    <div class="container-fluid text-main position-relative text-center" id="app">
+        <div class="row position-absolute m-0" id="user">
+            <div class="col rounded-3 bg-light-background m-0 p-3">
                 <img id="user-image" class="d-inline rounded-circle" v-bind:src="image"/>
-                <span class="ms-2 d-inline fs-2 align-middle">{{ name }}({{ email }})</span>
+                <span class="ms-2 d-inline align-middle">{{ name }}({{ email }})</span>
             </div>
         </div>
-        <div class="row">
-            <span class="fs-2">歌名: {{ track_name }}</span>
-            <span class="fs-3">音量: {{ volume }}%</span>
+        <div class="row position-absolute m-0" id="volume-box">
+            <!-- <input type="range" class="custom-range m-0 p-3" min="0" max="100" step="1" id="volume"> -->
         </div>
-        <div class="row">
-            <div class="btn-toolbar" role="toolbar">
-                <div class="btn-group" role="group">
-                    <button class="btn btn-main" id="prevTrack">
-                        <i class="bi bi-skip-backward-fill"></i>
-                    </button>
-                    <button class="btn btn-main" id="togglePlay">
-                        <i v-if="paused" class="bi bi-play-fill"></i>
-                        <i v-else class="bi bi-pause-fill"></i>
-                    </button>
-                    <button class="btn btn-main" id="nextTrack">
-                        <i class="bi bi-skip-forward-fill"></i>
-                    </button>
+        <div class="row" id="player">
+            <div class="col align-self-center">
+                <div class="row mb-4">
+                    <div class="col">
+                        <span class="fs-2 text-background badge bg-main">{{ album_name }}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <img class="m-auto" id="album-image" v-bind:src="album_image"/>
+                </div>
+                <div class="row mt-4">
+                    <span class="fs-3">{{ track_name }}</span>
+                    <!-- <span class="fs-4">音量: {{ volume }}%</span> -->
+                </div>
+                <div class="row mt-4">
+                    <div class="btn-toolbar justify-content-center" role="toolbar">
+                        <div class="btn-group" role="group">
+                            <button class="btn btn-main" id="prevTrack">
+                                <i class="bi bi-skip-backward-fill"></i>
+                            </button>
+                            <button class="btn btn-main" id="togglePlay">
+                                <i v-if="paused" class="bi bi-play-fill"></i>
+                                <i v-else class="bi bi-pause-fill"></i>
+                            </button>
+                            <button class="btn btn-main" id="nextTrack">
+                                <i class="bi bi-skip-forward-fill"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

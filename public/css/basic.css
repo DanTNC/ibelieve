@@ -37,3 +37,47 @@ button:hover,
 .text-main {
     color: var(--main);
 }
+
+.text-dark-main {
+    color: var(--dark-main)
+}
+
+.text-light-main {
+    color: var(--light-main)
+}
+
+.text-background {
+    color: var(--background)
+}
+
+.text-dark-background {
+    color: var(--dark-background)
+}
+
+.text-light-background {
+    color: var(--light-background)
+}
+
+.bg-main {
+    background-color: var(--main)
+}
+
+.bg-dark-main {
+    background-color: var(--dark-main)
+}
+
+.bg-light-main {
+    background-color: var(--light-main)
+}
+
+.bg-background {
+    background-color: var(--background)
+}
+
+.bg-dark-background {
+    background-color: var(--dark-background)
+}
+
+.bg-light-background {
+    background-color: var(--light-background)
+}
