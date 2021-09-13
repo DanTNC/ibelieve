@@ -1,6 +1,4 @@
 module.exports = (mappingModel, data, callback) => {
-    console.log("save mapping")
-
     mappingModel.findOne({uid: data.uid}, function(err, mapping) {
         if(err) {
             callback([false, "connect to DB failed"])
@@ -8,6 +6,7 @@ module.exports = (mappingModel, data, callback) => {
         }
 
         if(mapping == null) {
+            console.log("save mapping")
             var mapping = new mappingModel(data)
 
             mapping.save(function(err) {
@@ -19,13 +18,16 @@ module.exports = (mappingModel, data, callback) => {
                 callback([true, data.access])
             })
         } else {
-            mapping.update({uid: data.uid}, data, function(err) {
+            console.log("update mapping")
+            mapping.access = data.access
+            mapping.refresh = data.refresh
+            mapping.save(function(err) {
                 if(err) {
                     callback([false, "connect to DB failed"])
                     return console.log(err)
                 }
 
-                callback([true, data.access])
+                callback([true, mapping.access])
             })
         }
     })

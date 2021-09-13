@@ -1,8 +1,8 @@
 var ibelieve_player
+var app
 
 const urlSearchParams = new URLSearchParams(window.location.search);
 const uidFromQuery = urlSearchParams.get('uid');
-console.log(uidFromQuery);
 if (uidFromQuery) {
     localStorage.setItem("uid", uidFromQuery)
 }
@@ -14,6 +14,7 @@ const checkIfExpired = (token, callback) => {
         data: {
             access_token: token
         },
+        cache: false,
         success: function(data) {// not expired
             callback(token)
         },
@@ -27,6 +28,7 @@ const checkIfExpired = (token, callback) => {
                         "uid": uid,
                         "action": "refresh"
                     },
+                    cache: false,
                     success: function(token) {
                         callback(token)
                     },
@@ -47,6 +49,7 @@ const getTokenThen = (callback) => {
         data: {
             "uid": uid,
         },
+        cache: false,
         success: function(token) {
             checkIfExpired(token, callback)
         },
@@ -91,6 +94,16 @@ class IBelievePlayer {
         this.player.addListener('account_error', ({ message }) => {
             console.error(message)
         })
+
+        this.player.addListener('player_state_changed', (state) => {
+            this.player.getCurrentState().then((state) => {
+                app.track_name = state.track_window.current_track.name
+                app.paused = state.paused
+            })
+            this.player.getVolume().then((volume) => {
+                app.volume = Math.round(volume * 100)
+            })
+        })
     
         $("#togglePlay").click(() => {
             this.player.togglePlay()
@@ -120,6 +133,12 @@ class IBelievePlayer {
             })
         })
     }
+
+    setVolume(volume) {
+        this.player.setVolume(volume).then(() => {
+            app.volume = Math.round(volume * 100)
+        })
+    }
 }
 
 window.onSpotifyWebPlaybackSDKReady = () => {
@@ -127,3 +146,14 @@ window.onSpotifyWebPlaybackSDKReady = () => {
         ibelieve_player = new IBelievePlayer(token)
     })
 }
+
+$(()=>{
+    app = new Vue({
+        el: '#player',
+        data: {
+            track_name: '',
+            volume: 0,
+            paused: true
+        }
+    })
+})
