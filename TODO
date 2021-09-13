@@ -2,7 +2,11 @@ use search or playlist to get spotify_uri
 
 use getOAuthToken function of player to play a spotify_uri
 
-display album information (name, image), track information (artists)
+display album information (name, image), track information (artists), playlist information (name, image)
+
+check context first, if album just show the information, if playlist, ask information, if others, treat as album
+
+control volume and position_ms
 
 ================================================
 

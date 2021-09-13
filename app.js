@@ -87,7 +87,9 @@ app.get('/login', function(req, res) {
                 streaming \
                 user-read-email \
                 user-read-private \
-                user-read-playback-state';
+                user-read-playback-state \
+                user-modify-playback-state \
+                user-read-currently-playing';
   res.redirect('https://accounts.spotify.com/authorize' +
       '?response_type=code' +
       '&client_id=' + process.env.ibelieve_client_id +
