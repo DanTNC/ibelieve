@@ -2,6 +2,8 @@ use search or playlist to get spotify_uri
 
 use getOAuthToken function of player to play a spotify_uri
 
+display album information (name, image), track information (artists)
+
 ================================================
 
 Vue.js for player (showing name, controls, prev, next tracks, etc...)

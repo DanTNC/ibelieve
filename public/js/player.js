@@ -68,7 +68,7 @@ class IBelievePlayer {
         this.player = new Spotify.Player({
             name: 'I Believe Spotify',
             getOAuthToken: cb => { cb(token) },
-            volume: 0.5
+            volume: 0.25
         })
     
         // Ready
