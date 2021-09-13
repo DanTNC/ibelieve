@@ -13,8 +13,6 @@ const port = process.env.PORT || 3000
 const dev = (process.env.ibelieve_dev || "false") === "true"
 const redirect_uri = dev? 'http://localhost:3000/callback': 'https://ibelieve.herokuapp.com/callback'
 
-// var mapping = {}
-
 const get_token = (code, uid, callback) => {
   axios.post(
     'https://accounts.spotify.com/api/token',
@@ -32,10 +30,6 @@ const get_token = (code, uid, callback) => {
     } 
   ).then((response) => {
     console.log(response)
-    // mapping[uid] = {
-    //   access: response.data.access_token,
-    //   refresh: response.data.refresh_token
-    // }
     saveMapping(mappingModel, {
       uid: uid,
       access: response.data.access_token,
@@ -62,10 +56,6 @@ const refresh = (uid, refresh_token, callback) => {
     } 
   ).then((response) => {
     console.log(response)
-    // mapping[uid] = {
-    //   access: response.data.access_token,
-    //   refresh: response.data.refresh_token ?? mapping[uid]["refresh"]
-    // }
     saveMapping(mappingModel, {
       uid: uid,
       access: response.data.access_token,
@@ -96,7 +86,8 @@ app.get('/login', function(req, res) {
   var scopes = 'playlist-read-private \
                 streaming \
                 user-read-email \
-                user-read-private';
+                user-read-private \
+                user-read-playback-state';
   res.redirect('https://accounts.spotify.com/authorize' +
       '?response_type=code' +
       '&client_id=' + process.env.ibelieve_client_id +
