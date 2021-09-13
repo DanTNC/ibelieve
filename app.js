@@ -78,10 +78,6 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'view/home.html'))
 })
 
-app.get('/signup', (req, res) => {
-  res.sendFile(path.join(__dirname, 'view/signup.html'))
-})
-
 app.get('/login', function(req, res) {
   var scopes = 'playlist-read-private \
                 streaming \

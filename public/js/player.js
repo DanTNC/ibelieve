@@ -97,6 +97,7 @@ class IBelievePlayer {
 
         this.player.addListener('player_state_changed', (state) => {
             this.player.getCurrentState().then((state) => {
+                console.log(state)
                 app.track_name = state.track_window.current_track.name
                 app.paused = state.paused
             })
