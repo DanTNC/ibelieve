@@ -7,6 +7,10 @@
     width: 30px;
 }
 
+#album-image-container {
+    width: 40vh;
+}
+
 #album-image {
     height: 40vh;
     width: auto;
@@ -17,10 +21,17 @@
 }
 
 #volume-box {
-    bottom: 1vh;
-    right: 1vh;
+    bottom: 3vh;
+    right: 3vh;
+}
+
+#volume-box .progress {
+    width: 10vw;
+    height: 1vh;
+    padding: 0;
 }
 
 #volume {
-    width: 20vw;
+    pointer-events: none;
+    width: 5vw;
 }

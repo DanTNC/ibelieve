@@ -74,6 +74,14 @@ const registerPlayerUIListeners = (player) => {
     $("#nextTrack").click(() => {
         player.nextTrack()
     })
+
+    $("#volume-down").click(() => {
+        ibelieve_player.setVolume(Math.max(app.volume - 10, 0) / 100)
+    })
+
+    $("#volume-up").click(() => {
+        ibelieve_player.setVolume(Math.min(app.volume + 10, 100) / 100)
+    })
 }
 
 class IBelievePlayer {

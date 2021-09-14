@@ -20,8 +20,23 @@
                 <span class="ms-2 d-inline align-middle">{{ name }}({{ email }})</span>
             </div>
         </div>
-        <div class="row position-absolute m-0" id="volume-box">
-            <!-- <input type="range" class="custom-range m-0 p-3" min="0" max="100" step="1" id="volume"> -->
+        <div class="row position-absolute m-0 align-items-center" id="volume-box">
+            <div class="col p-0">
+                <div class="progress">
+                    <div class="progress-bar bg-main" v-bind:style="{ width: String(volume) + '%'}"></div>
+                </div>
+                <div class="btn-group btn-group-sm mt-4" role="group">
+                    <button class="btn btn-main bg-main" id="volume-down">
+                        <i class="bi bi-volume-down-fill text-background"></i>
+                    </button>
+                    <button class="btn btn-main bg-main" id="volume">
+                        {{ volume }}
+                    </button>
+                    <button class="btn btn-main bg-main" id="volume-up">
+                        <i class="bi bi-volume-up-fill text-background"></i>
+                    </button>
+                </div>
+            </div>
         </div>
         <div class="row" id="player">
             <div class="col align-self-center">
@@ -31,11 +46,12 @@
                     </div>
                 </div>
                 <div class="row">
-                    <img class="m-auto" id="album-image" v-bind:src="album_image"/>
+                    <div class="bg-light-background m-auto p-0" id="album-image-container">
+                        <img id="album-image" v-bind:src="album_image"/>
+                    </div>
                 </div>
                 <div class="row mt-4">
                     <span class="fs-3">{{ track_name }}</span>
-                    <!-- <span class="fs-4">音量: {{ volume }}%</span> -->
                 </div>
                 <div class="row mt-4">
                     <div class="btn-toolbar justify-content-center" role="toolbar">
