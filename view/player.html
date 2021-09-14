@@ -42,6 +42,13 @@
                 <div class="row mt-4">
                     <span class="fs-3">{{ track_name }}</span>
                 </div>
+                <div class="row mt-4 justify-content-center" id="track-position">
+                    <div class="progress overflow-visible">
+                        <div class="progress-bar overflow-visible rounded bg-main position-relative" v-bind:style="{ width: position_percentage }">
+                            <div class="rounded-circle bg-light-main position-absolute" id="position-controller"></div>
+                        </div>
+                    </div>
+                </div>
                 <div class="row mt-4">
                     <div class="btn-toolbar justify-content-center" role="toolbar">
                         <div class="btn-group" role="group">
