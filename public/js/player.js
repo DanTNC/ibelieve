@@ -1,5 +1,7 @@
 var ibelieve_player
 var app
+var volume_width = 0
+var volume_controller_x = 0
 
 const urlSearchParams = new URLSearchParams(window.location.search);
 const uidFromQuery = urlSearchParams.get('uid');
@@ -62,6 +64,18 @@ const getTokenThen = (callback) => {
     })
 }
 
+const volumeDragging = (e) => {
+    e = e || window.event
+    e.preventDefault()
+    const new_width = volume_width + (e.clientX - volume_controller_x)
+    ibelieve_player.setVolume(new_width / $(".progress:eq(0)").width())
+}
+
+const clearEvents = () => {
+    document.onmousemove = null
+    document.onmouseup = null
+}
+
 const registerPlayerUIListeners = (player) => {
     $("#togglePlay").click(() => {
         player.togglePlay()
@@ -75,12 +89,13 @@ const registerPlayerUIListeners = (player) => {
         player.nextTrack()
     })
 
-    $("#volume-down").click(() => {
-        ibelieve_player.setVolume(Math.max(app.volume - 10, 0) / 100)
-    })
-
-    $("#volume-up").click(() => {
-        ibelieve_player.setVolume(Math.min(app.volume + 10, 100) / 100)
+    $("#volume-controller").on('mousedown', (e) => {
+        e = e || window.event
+        e.preventDefault()
+        volume_width = $(".progress-bar:eq(0)").width()
+        volume_controller_x = e.clientX
+        document.onmousemove = volumeDragging
+        document.onmouseup = clearEvents
     })
 }
 

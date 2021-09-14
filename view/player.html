@@ -21,20 +21,9 @@
             </div>
         </div>
         <div class="row position-absolute m-0 align-items-center" id="volume-box">
-            <div class="col p-0">
-                <div class="progress">
-                    <div class="progress-bar bg-main" v-bind:style="{ width: String(volume) + '%'}"></div>
-                </div>
-                <div class="btn-group btn-group-sm mt-4" role="group">
-                    <button class="btn btn-main bg-main" id="volume-down">
-                        <i class="bi bi-volume-down-fill text-background"></i>
-                    </button>
-                    <button class="btn btn-main bg-main" id="volume">
-                        {{ volume }}
-                    </button>
-                    <button class="btn btn-main bg-main" id="volume-up">
-                        <i class="bi bi-volume-up-fill text-background"></i>
-                    </button>
+            <div class="progress overflow-visible">
+                <div class="progress-bar overflow-visible rounded bg-main position-relative" v-bind:style="{ width: String(volume) + '%'}">
+                    <div class="rounded bg-light-main position-absolute" id="volume-controller"></div>
                 </div>
             </div>
         </div>

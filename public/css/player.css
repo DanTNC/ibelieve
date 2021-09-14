@@ -31,7 +31,13 @@
     padding: 0;
 }
 
-#volume {
-    pointer-events: none;
-    width: 5vw;
+#volume-box .progress-bar {
+    transition: none;
+}
+
+#volume-controller {
+    right: -0.7vh;
+    width: 1.4vh;
+    height: 1.4vh;
+    z-index: 50;
 }
